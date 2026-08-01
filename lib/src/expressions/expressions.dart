@@ -46,10 +46,8 @@ abstract class CompoundExpression implements Expression {
 
 @immutable
 class Literal extends SimpleExpression {
-  Literal(
-    this.value, [
-    String? raw,
-  ]) : raw = raw ?? (value is String ? '"$value"' /*TODO escape*/ : '$value');
+  Literal(this.value, [String? raw])
+    : raw = raw ?? (value is String ? '"$value"' /*TODO escape*/ : '$value');
 
   final dynamic value;
   final String raw;
@@ -76,11 +74,7 @@ class Variable extends SimpleExpression {
 class ThisExpression extends SimpleExpression {}
 
 class MemberExpression extends SimpleExpression {
-  MemberExpression(
-    this.object,
-    this.property, {
-    this.nullable = false,
-  });
+  MemberExpression(this.object, this.property, {this.nullable = false});
 
   final bool nullable;
   final Expression object;
@@ -91,11 +85,7 @@ class MemberExpression extends SimpleExpression {
 }
 
 class IndexExpression extends SimpleExpression {
-  IndexExpression(
-    this.object,
-    this.index, {
-    this.nullable = false,
-  });
+  IndexExpression(this.object, this.index, {this.nullable = false});
 
   final bool nullable;
   final Expression index;
@@ -106,11 +96,7 @@ class IndexExpression extends SimpleExpression {
 }
 
 class CallExpression extends SimpleExpression {
-  CallExpression(
-    this.callee,
-    this.arguments, {
-    this.nullable = false,
-  });
+  CallExpression(this.callee, this.arguments, {this.nullable = false});
 
   final List<Expression> arguments;
   final Expression callee;
@@ -121,11 +107,7 @@ class CallExpression extends SimpleExpression {
 }
 
 class UnaryExpression extends SimpleExpression {
-  UnaryExpression(
-    this.operator,
-    this.argument, {
-    this.prefix = true,
-  });
+  UnaryExpression(this.operator, this.argument, {this.prefix = true});
 
   final String operator;
 
@@ -139,11 +121,7 @@ class UnaryExpression extends SimpleExpression {
 
 @immutable
 class BinaryExpression extends CompoundExpression {
-  BinaryExpression(
-    this.operator,
-    this.left,
-    this.right,
-  );
+  BinaryExpression(this.operator, this.left, this.right);
 
   final String operator;
   final Expression left;
@@ -166,11 +144,13 @@ class BinaryExpression extends CompoundExpression {
 
   @override
   String toString() {
-    final l = (left is BinaryExpression &&
+    final l =
+        (left is BinaryExpression &&
             (left as BinaryExpression).precedence < precedence)
         ? '($left)'
         : '$left';
-    final r = (right is BinaryExpression &&
+    final r =
+        (right is BinaryExpression &&
             (right as BinaryExpression).precedence < precedence)
         ? '($right)'
         : '$right';
@@ -179,11 +159,7 @@ class BinaryExpression extends CompoundExpression {
 }
 
 class ConditionalExpression extends CompoundExpression {
-  ConditionalExpression(
-    this.test,
-    this.consequent,
-    this.alternate,
-  );
+  ConditionalExpression(this.test, this.consequent, this.alternate);
 
   final Expression test;
   final Expression consequent;

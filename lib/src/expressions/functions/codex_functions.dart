@@ -16,8 +16,9 @@ class CodexFunctions {
       encoder: (value) => const Base64Codec.urlSafe().encode(value),
     ),
     'json': Codex(
-        decoder: (value) => json.decode(value),
-        encoder: (value) => json.encode(value)),
+      decoder: (value) => json.decode(value),
+      encoder: (value) => json.encode(value),
+    ),
     'hex': Codex(
       decoder: (value) => hex.decode(value),
       encoder: (value) => hex.encode(value),

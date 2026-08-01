@@ -1,10 +1,7 @@
 typedef CodexFunction = dynamic Function(dynamic value);
 
 class Codex {
-  const Codex({
-    required this.decoder,
-    required this.encoder,
-  });
+  const Codex({required this.decoder, required this.encoder});
 
   final CodexFunction decoder;
   final CodexFunction encoder;

@@ -3,10 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   final context = {
-    'person': {
-      'firstName': 'John',
-      'lastName': 'Smith',
-    },
+    'person': {'firstName': 'John', 'lastName': 'Smith'},
   };
 
   test('yaml template', () {

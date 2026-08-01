@@ -8,7 +8,9 @@ import 'expressions.dart';
 class ExpressionParser {
   ExpressionParser() {
     expression.set(
-      binaryExpression.seq(conditionArguments.optional()).map(
+      binaryExpression
+          .seq(conditionArguments.optional())
+          .map(
             (l) => l[1] == null
                 ? l[0]
                 : ConditionalExpression(l[0], l[1][0], l[1][1]),
@@ -21,11 +23,12 @@ class ExpressionParser {
   // e.g.: `foo`, `_value`, `$x1`
   Parser<Identifier> get identifier =>
       (digit().not() & (word() | char(r'$')).plus()).flatten().map(
-            (v) => Identifier(v),
-          );
+        (v) => Identifier(v),
+      );
 
   // Parse simple numeric literals: `12`, `3.4`, `.5`.
-  Parser<Literal> get numericLiteral => ((digit() | char('.')).and() &
+  Parser<Literal> get numericLiteral =>
+      ((digit() | char('.')).and() &
               (digit().star() &
                   ((char('.') & digit().plus()) |
                           (char('x') & digit().plus()) |
@@ -35,37 +38,40 @@ class ExpressionParser {
                       .optional()))
           .flatten()
           .map((v) {
-        return Literal(num.parse(v), v);
-      });
+            return Literal(num.parse(v), v);
+          });
 
   Parser<String> get escapedChar =>
       (char(r'\') & anyOf("nrtbfv\"'\\")).pick(1).cast();
 
   String unescape(String v) => v.replaceAllMapped(
-      RegExp("\\\\[nrtbf\"'\\\\]"),
-      (v) => const {
-            'n': '\n',
-            'r': '\r',
-            't': '\t',
-            'b': '\b',
-            'f': '\f',
-            'v': '\v',
-            "'": "'",
-            '"': '"',
-            '\\': '\\',
-          }[v.group(0)!.substring(1)]!);
+    RegExp("\\\\[nrtbf\"'\\\\]"),
+    (v) => const {
+      'n': '\n',
+      'r': '\r',
+      't': '\t',
+      'b': '\b',
+      'f': '\f',
+      'v': '\v',
+      "'": "'",
+      '"': '"',
+      '\\': '\\',
+    }[v.group(0)!.substring(1)]!,
+  );
 
-  Parser<Literal> get sqStringLiteral => (char("'") &
-          (anyOf(r"'\").neg() | escapedChar).star().flatten() &
-          char("'"))
-      .pick(1)
-      .map((v) => Literal(unescape(v), "'$v'"));
+  Parser<Literal> get sqStringLiteral =>
+      (char("'") &
+              (anyOf(r"'\").neg() | escapedChar).star().flatten() &
+              char("'"))
+          .pick(1)
+          .map((v) => Literal(unescape(v), "'$v'"));
 
-  Parser<Literal> get dqStringLiteral => (char('"') &
-          (anyOf(r'"\').neg() | escapedChar).star().flatten() &
-          char('"'))
-      .pick(1)
-      .map((v) => Literal(unescape(v), '"$v"'));
+  Parser<Literal> get dqStringLiteral =>
+      (char('"') &
+              (anyOf(r'"\').neg() | escapedChar).star().flatten() &
+              char('"'))
+          .pick(1)
+          .map((v) => Literal(unescape(v), '"$v"'));
 
   // Parses a string literal, staring with single or double quotes with basic
   // support for escape codes e.g. `'hello world'`, `'this is\nJSEP'`
@@ -97,13 +103,14 @@ class ExpressionParser {
           .pick(1)
           .map((l) => Literal(l, '$l'));
 
-  Parser<Literal> get literal => (numericLiteral |
-          stringLiteral |
-          boolLiteral |
-          nullLiteral |
-          arrayLiteral |
-          mapLiteral)
-      .cast();
+  Parser<Literal> get literal =>
+      (numericLiteral |
+              stringLiteral |
+              boolLiteral |
+              nullLiteral |
+              arrayLiteral |
+              mapLiteral)
+          .cast();
 
   // An individual part of a binary expression:
   // e.g. `foo.bar(baz)`, `1`, `'abc'`, `(a % 2)` (because it's in parenthesis)
@@ -156,7 +163,8 @@ class ExpressionParser {
           while ((stack.length > 2) &&
               (prec <=
                   BinaryExpression.precedenceForOperator(
-                      stack[stack.length - 2]))) {
+                    stack[stack.length - 2],
+                  ))) {
             final right = stack.removeLast();
             final op = stack.removeLast();
             final left = stack.removeLast();
@@ -211,8 +219,8 @@ class ExpressionParser {
   // It also gobbles function calls:
   // e.g. `Math.acos(obj.angle)`
   Parser<Expression> get variable => groupOrIdentifier
-          .seq((memberArgument.cast() | indexArgument | callArgument).star())
-          .map((l) {
+      .seq((memberArgument.cast() | indexArgument | callArgument).star())
+      .map((l) {
         final a = l[0] as Expression;
         final b = l[1] as List;
         return b.fold(a, (Expression object, argument) {
@@ -299,7 +307,8 @@ class WithSeparatorListParser<T, R> extends DelegateParser<T, List<R>> {
     final result = delegate.parseOn(context);
     if (result is Success) {
       return result.success(
-          (result.value as SeparatedList).sequential.toList().cast<R>());
+        (result.value as SeparatedList).sequential.toList().cast<R>(),
+      );
     } else {
       return result.failure(result.message);
     }

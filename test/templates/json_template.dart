@@ -5,10 +5,7 @@ import 'package:test/test.dart';
 
 void main() {
   final context = {
-    'person': {
-      'firstName': 'John',
-      'lastName': 'Smith',
-    },
+    'person': {'firstName': 'John', 'lastName': 'Smith'},
   };
 
   test('json template', () {
@@ -16,14 +13,11 @@ void main() {
 
     final result = template.process(context: context);
 
-    expect(
-      json.decode(result),
-      {
-        'firstName': 'John',
-        'lastName': 'Smith',
-        'email': 'john.smith@example.com'
-      },
-    );
+    expect(json.decode(result), {
+      'firstName': 'John',
+      'lastName': 'Smith',
+      'email': 'john.smith@example.com',
+    });
   });
 }
 
