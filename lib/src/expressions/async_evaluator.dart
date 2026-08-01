@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:template_expressions/expressions.dart';
 
-Stream _asStream(v) => v is Stream
+Stream _asStream(dynamic v) => v is Stream
     ? v
     : v is Future
     ? Stream.fromFuture(v)
     : Stream.value(v);
-Literal _asLiteral(v) {
+
+Literal _asLiteral(dynamic v) {
   if (v is Map) {
     return Literal(v.map((k, v) => MapEntry(_asLiteral(k), _asLiteral(v))));
   }

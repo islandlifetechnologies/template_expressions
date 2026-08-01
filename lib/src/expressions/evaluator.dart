@@ -32,7 +32,7 @@ export 'functions/random_functions.dart';
 /// For example:
 ///
 ///   var evaluator = ExpressionEvaluator(memberAccessors: [
-///     MemberAccessor<Person>({
+///     MemberAccessor&lt;Person&gt;({
 ///       'firstname': (v)=>v.firstname,
 ///       'lastname': (v)=>v.lastname,
 ///       'address': (v)=>v.address

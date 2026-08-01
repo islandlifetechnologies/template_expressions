@@ -2,11 +2,10 @@ import 'package:logging/logging.dart';
 import 'package:template_expressions/template_expressions.dart';
 
 class Template {
-  Template({required String value, List<ExpressionSyntax>? syntax})
+  Template({required this._value, List<ExpressionSyntax>? syntax})
     : _syntax = syntax?.isNotEmpty == true
           ? syntax!
-          : const [StandardExpressionSyntax()],
-      _value = value;
+          : const [StandardExpressionSyntax()];
 
   static final Logger _logger = Logger('Template');
 
