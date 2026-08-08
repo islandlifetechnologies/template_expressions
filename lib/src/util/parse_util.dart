@@ -26,9 +26,7 @@ double? maybeParseDouble(dynamic value, [double? defaultValue]) {
       } else {
         result = double.tryParse(value);
       }
-    } else if (value is double) {
-      result = value;
-    } else if (value is int) {
+    } else if (value is num) {
       result = value.toDouble();
     }
   } catch (_) {
@@ -66,9 +64,7 @@ double parseDouble(dynamic value) {
       } else {
         result = double.tryParse(value);
       }
-    } else if (value is double) {
-      result = value;
-    } else if (value is int) {
+    } else if (value is num) {
       result = value.toDouble();
     }
   } catch (_) {
