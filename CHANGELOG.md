@@ -1,3 +1,7 @@
+## 4.0.2
+
+- Moved `Template.value` from named parameter to a positional one.
+
 ## 4.0.1
 
 - Address WASM issues for downstream packages using this in the web.

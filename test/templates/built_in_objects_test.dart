@@ -27,7 +27,7 @@ void main() {
           'YWFCa3hKezJNRlQrK0EhPkBrJj5oem42OlUpWCElJVlaMmM+K3RhamA7Zjk3Z1ArRkQ7K1J6bl46diRVSz03UDJwTlczeydnNWc/MmtzdlNmY3I1fUszcShnI31jITg+XlRXcXd4V0VbRntHSEFBS2grUUZUKFR6MmFaPVQqJ04=';
       final context = {'key': key};
 
-      final template = Template(value: r'${hmac(key, "foobar")}');
+      final template = Template(r'${hmac(key, "foobar")}');
       final actual = template.process(context: context);
 
       expect(
@@ -41,7 +41,7 @@ void main() {
           'YWFCa3hKezJNRlQrK0EhPkBrJj5oem42OlUpWCElJVlaMmM+K3RhamA7Zjk3Z1ArRkQ7K1J6bl46diRVSz03UDJwTlczeydnNWc/MmtzdlNmY3I1fUszcShnI31jITg+XlRXcXd4V0VbRntHSEFBS2grUUZUKFR6MmFaPVQqJ04=';
       final context = {'key': key};
 
-      final template = Template(value: r'${hmac256(key, "foobar")}');
+      final template = Template(r'${hmac256(key, "foobar")}');
       final actual = template.process(context: context);
 
       expect(
@@ -55,7 +55,7 @@ void main() {
           'YWFCa3hKezJNRlQrK0EhPkBrJj5oem42OlUpWCElJVlaMmM+K3RhamA7Zjk3Z1ArRkQ7K1J6bl46diRVSz03UDJwTlczeydnNWc/MmtzdlNmY3I1fUszcShnI31jITg+XlRXcXd4V0VbRntHSEFBS2grUUZUKFR6MmFaPVQqJ04=';
       final context = {'key': key};
 
-      final template = Template(value: r'${hmac512(key, "foobar")}');
+      final template = Template(r'${hmac512(key, "foobar")}');
       final actual = template.process(context: context);
 
       expect(
@@ -65,28 +65,28 @@ void main() {
     });
 
     test('md5', () {
-      final template = Template(value: r'${md5("foobar")}');
+      final template = Template(r'${md5("foobar")}');
       final actual = template.process();
 
       expect(actual, md5.convert(utf8.encode('foobar')).toString());
     });
 
     test('sha', () {
-      final template = Template(value: r'${sha("foobar")}');
+      final template = Template(r'${sha("foobar")}');
       final actual = template.process();
 
       expect(actual, sha256.convert(utf8.encode('foobar')).toString());
     });
 
     test('sha256', () {
-      final template = Template(value: r'${sha256("foobar")}');
+      final template = Template(r'${sha256("foobar")}');
       final actual = template.process();
 
       expect(actual, sha256.convert(utf8.encode('foobar')).toString());
     });
 
     test('sha512', () {
-      final template = Template(value: r'${sha512("foobar")}');
+      final template = Template(r'${sha512("foobar")}');
       final actual = template.process();
 
       expect(actual, sha512.convert(utf8.encode('foobar')).toString());
@@ -99,7 +99,7 @@ void main() {
 
     test('Map', () {
       var template = Template(
-        value: r'${DateTime({"year": year, "month": 2, "day": 07\})}',
+        r'${DateTime({"year": year, "month": 2, "day": 07\})}',
       );
       expect(
         template.process(context: context),
@@ -107,9 +107,8 @@ void main() {
       );
 
       template = Template(
+        '{{DateTime({"year": year, "month": 2, "day": 07, "hour": 12, "minute": 30, "second": 10, "milliseconds": 20})}}',
         syntax: [const MustacheExpressionSyntax()],
-        value:
-            '{{DateTime({"year": year, "month": 2, "day": 07, "hour": 12, "minute": 30, "second": 10, "milliseconds": 20})}}',
       );
       expect(
         template.process(context: context),
@@ -119,8 +118,8 @@ void main() {
 
     test('List', () {
       final template = Template(
+        '{{DateTime([year, 2, 07, 12, 30, 10, 20])}}',
         syntax: [const MustacheExpressionSyntax()],
-        value: '{{DateTime([year, 2, 07, 12, 30, 10, 20])}}',
       );
       expect(
         template.process(context: context),
@@ -130,14 +129,14 @@ void main() {
 
     test('params', () {
       var template = Template(
+        '{{DateTime(year, 02)}}',
         syntax: [const MustacheExpressionSyntax()],
-        value: '{{DateTime(year, 02)}}',
       );
       expect(template.process(context: context), DateTime(2022, 02).toString());
 
       template = Template(
+        '{{DateTime(year, 2, 07, 12, 30, 10, 20)}}',
         syntax: [const MustacheExpressionSyntax()],
-        value: '{{DateTime(year, 2, 07, 12, 30, 10, 20)}}',
       );
       expect(
         template.process(context: context),
@@ -146,7 +145,7 @@ void main() {
     });
 
     test('epoch millis', () {
-      final template = Template(value: r'${DateTime(1645412678503)}');
+      final template = Template(r'${DateTime(1645412678503)}');
       expect(
         template.process(context: context),
         DateTime.fromMillisecondsSinceEpoch(1645412678503).toString(),
@@ -155,7 +154,7 @@ void main() {
 
     test('formatting', () {
       var template = Template(
-        value: r'${DateFormat("yyyy-MM-dd").parse("2022-02-07").add(days(1))}',
+        r'${DateFormat("yyyy-MM-dd").parse("2022-02-07").add(days(1))}',
       );
       expect(
         template.process(context: context),
@@ -163,14 +162,11 @@ void main() {
       );
 
       template = Template(
-        value:
-            r'${DateFormat("yyyy-MM-dd").format(DateTime([2022, 02, 07]).toLocal())}',
+        r'${DateFormat("yyyy-MM-dd").format(DateTime([2022, 02, 07]).toLocal())}',
       );
       expect(template.process(context: context), '2022-02-07');
 
-      template = Template(
-        value: r'${DateTime([2022, 02, 07]).format("yyyy-MM-dd")}',
-      );
+      template = Template(r'${DateTime([2022, 02, 07]).format("yyyy-MM-dd")}');
       expect(template.process(context: context), '2022-02-07');
     });
 
@@ -179,14 +175,14 @@ void main() {
       final customContext = <String, dynamic>{};
       customContext['now'] = () => now;
       var template = Template(
-        value: r'${now().subtract(Duration({"days": 1\})).toUtc()}',
+        r'${now().subtract(Duration({"days": 1\})).toUtc()}',
       );
       expect(
         template.process(context: customContext),
         now.subtract(const Duration(days: 1)).toUtc().toString(),
       );
 
-      template = Template(value: r'${now().subtract(days(1)).toUtc()}');
+      template = Template(r'${now().subtract(days(1)).toUtc()}');
       expect(
         template.process(context: customContext),
         now.subtract(const Duration(days: 1)).toUtc().toString(),
@@ -199,8 +195,7 @@ void main() {
       final context = <String, dynamic>{};
 
       final template = Template(
-        value:
-            r'${Duration({"days": 1, "hours": 2, "minutes": 3, "seconds": 4, "milliseconds": 5\})}',
+        r'${Duration({"days": 1, "hours": 2, "minutes": 3, "seconds": 4, "milliseconds": 5\})}',
       );
       expect(
         template.process(context: context),
@@ -217,7 +212,7 @@ void main() {
     test('List', () {
       final context = <String, dynamic>{};
 
-      final template = Template(value: r'${Duration([1, 2, 3, 4, 5])}');
+      final template = Template(r'${Duration([1, 2, 3, 4, 5])}');
       expect(
         template.process(context: context),
         const Duration(
@@ -233,7 +228,7 @@ void main() {
     test('Params', () {
       final context = <String, dynamic>{};
 
-      final template = Template(value: r'${Duration(1, 2, 3, 4, 5)}');
+      final template = Template(r'${Duration(1, 2, 3, 4, 5)}');
       expect(
         template.process(context: context),
         const Duration(
@@ -249,7 +244,7 @@ void main() {
     test('millis', () {
       final context = <String, dynamic>{};
 
-      final template = Template(value: r'${Duration(1001)}');
+      final template = Template(r'${Duration(1001)}');
       expect(
         template.process(context: context),
         const Duration(seconds: 1, milliseconds: 1).toString(),
@@ -271,7 +266,7 @@ void main() {
 
     test('async', () async {
       final startTime = DateTime.now().millisecondsSinceEpoch;
-      final template = Template(value: r'${a() + b()}');
+      final template = Template(r'${a() + b()}');
 
       expect(await template.processAsync(context: context), '3');
 
@@ -290,8 +285,7 @@ void main() {
     };
     test('JsonPath', () {
       final template = Template(
-        value:
-            r'${JsonPath("$.name.first").read(person).first.value + " " + JsonPath("$.name.last").read(person).first.value}',
+        r'${JsonPath("$.name.first").read(person).first.value + " " + JsonPath("$.name.last").read(person).first.value}',
       );
 
       expect(template.process(context: context), 'John Doe');
@@ -299,22 +293,21 @@ void main() {
 
     test('json_path', () {
       final template = Template(
-        value:
-            r'${json_path(person, "$.name.first").toUpperCase() + " " + json_path(person, "$.name.last").toUpperCase()}',
+        r'${json_path(person, "$.name.first").toUpperCase() + " " + json_path(person, "$.name.last").toUpperCase()}',
       );
 
       expect(template.process(context: context), 'JOHN DOE');
     });
 
     test('json_path simple', () {
-      final template = Template(value: r"${json_path(person, '$.name.first')}");
+      final template = Template(r"${json_path(person, '$.name.first')}");
 
       expect(template.process(context: context), 'John');
     });
 
     test('list', () {
       expect(
-        Template(value: r'${x.path("$[1]")}').process(
+        Template(r'${x.path("$[1]")}').process(
           context: {
             'x': ['foo', 'bar'],
           },
@@ -324,7 +317,7 @@ void main() {
     });
     test('map', () {
       expect(
-        Template(value: r'${x.path("$.bar")}').process(
+        Template(r'${x.path("$.bar")}').process(
           context: {
             'x': {'foo': 'foo', 'bar': 'bar'},
           },
@@ -334,7 +327,7 @@ void main() {
     });
     test('json string', () {
       expect(
-        Template(value: r'${x.path("$.bar")}').process(
+        Template(r'${x.path("$.bar")}').process(
           context: {
             'x': '''
             {
@@ -350,7 +343,7 @@ void main() {
 
     test('yaml string', () {
       expect(
-        Template(value: r'${x.path("$.bar")}').process(
+        Template(r'${x.path("$.bar")}').process(
           context: {
             'x': '''
 foo: foo
@@ -369,7 +362,7 @@ bar: bar
     test('toBase64', () {
       expect(
         Template(
-          value: r'${input.toBase64()}',
+          r'${input.toBase64()}',
         ).process(context: {'input': utf8.encode(input)}),
         base64.encode(utf8.encode(input)),
       );
@@ -378,7 +371,7 @@ bar: bar
     test('toHex', () {
       expect(
         Template(
-          value: r'${input.toHex()}',
+          r'${input.toHex()}',
         ).process(context: {'input': utf8.encode(input)}),
         hex.encode(utf8.encode(input)),
       );
@@ -387,7 +380,7 @@ bar: bar
     test('toString', () {
       expect(
         Template(
-          value: r'${input.toString()}',
+          r'${input.toString()}',
         ).process(context: {'input': utf8.encode(input)}),
         input,
       );
@@ -398,45 +391,38 @@ bar: bar
     test('format', () {
       expect(
         Template(
-          value: r'${NumberFormat("#,###.00").format(x)}',
+          r'${NumberFormat("#,###.00").format(x)}',
         ).process(context: {'x': 1234}),
         '1,234.00',
       );
       expect(
         Template(
-          value: r'${NumberFormat("#,###.00").format(x)}',
+          r'${NumberFormat("#,###.00").format(x)}',
         ).process(context: {'x': 1234.0}),
         '1,234.00',
       );
       expect(
-        Template(
-          value: r'${x.format("#,###.00")}',
-        ).process(context: {'x': 1234.0}),
+        Template(r'${x.format("#,###.00")}').process(context: {'x': 1234.0}),
         '1,234.00',
       );
       expect(
-        Template(
-          value: r'${x.format("#,###.00")}',
-        ).process(context: {'x': 1234}),
+        Template(r'${x.format("#,###.00")}').process(context: {'x': 1234}),
         '1,234.00',
       );
     });
 
     test('parse', () {
       expect(
-        Template(value: r'${x.toInt()}').evaluate(context: {'x': '1234.45'}),
+        Template(r'${x.toInt()}').evaluate(context: {'x': '1234.45'}),
         1234,
       );
       expect(
-        Template(value: r'${x.toDouble()}').evaluate(context: {'x': '1234.45'}),
+        Template(r'${x.toDouble()}').evaluate(context: {'x': '1234.45'}),
         1234.45,
       );
+      expect(Template(r'${x.toInt()}').evaluate(context: {'x': 'foo'}), null);
       expect(
-        Template(value: r'${x.toInt()}').evaluate(context: {'x': 'foo'}),
-        null,
-      );
-      expect(
-        Template(value: r'${x.toDouble()}').evaluate(context: {'x': 'foo'}),
+        Template(r'${x.toDouble()}').evaluate(context: {'x': 'foo'}),
         null,
       );
     });
@@ -444,7 +430,7 @@ bar: bar
 
   group('random', () {
     test('int', () {
-      final template = Template(value: r'${random(100)}');
+      final template = Template(r'${random(100)}');
 
       final processed = int.parse(template.process());
 
@@ -452,7 +438,7 @@ bar: bar
     });
 
     test('double', () {
-      final template = Template(value: r'${random()}');
+      final template = Template(r'${random()}');
 
       final processed = double.parse(template.process());
 

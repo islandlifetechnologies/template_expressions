@@ -7,7 +7,7 @@ void main() {
   };
 
   test('yaml template', () {
-    final template = Template(value: _kTemplate);
+    final template = Template(_kTemplate);
 
     final result = template.process(context: context);
 

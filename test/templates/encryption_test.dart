@@ -30,13 +30,13 @@ void main() {
       final context = {'data': 'Hello World!', 'key': key};
 
       final encrypted = Template(
-        value: r'${AES().key(key).encrypt(data)}',
+        r'${AES().key(key).encrypt(data)}',
       ).process(context: context);
 
       expect(encrypted != context['data'], true);
 
       final decrypted = Template(
-        value: '\${AES().key(key).decrypt("$encrypted").toString()}',
+        '\${AES().key(key).decrypt("$encrypted").toString()}',
       ).process(context: context);
 
       expect(decrypted, context['data']);
@@ -46,7 +46,7 @@ void main() {
       final context = {'data': 'Hello World!', 'iv': _kIV, 'key': _kAesKey};
 
       final encrypted = Template(
-        value: r'${AES().key(key).iv(iv).encrypt(data)}',
+        r'${AES().key(key).iv(iv).encrypt(data)}',
       ).process(context: context);
 
       final parts = encrypted.split(':');
@@ -55,7 +55,7 @@ void main() {
       expect(encrypted, 'UPiAY93c6VgQyiTc8mXzzg==:QpuT2peJ+VKBcWSLi06q4A==');
 
       final decrypted = Template(
-        value: r'${AES().key(key).iv(iv).decrypt(encrypted).toString()}',
+        r'${AES().key(key).iv(iv).decrypt(encrypted).toString()}',
       ).process(context: {...context, 'encrypted': encrypted});
 
       expect(decrypted, context['data']);
@@ -77,13 +77,13 @@ void main() {
       };
 
       final encrypted = Template(
-        value: r'${RSA().publicKey(publicKey).encrypt(data)}',
+        r'${RSA().publicKey(publicKey).encrypt(data)}',
       ).process(context: context);
 
       expect(encrypted != context['data'], true);
 
       final decrypted = Template(
-        value: r'${RSA().privateKey(privateKey).decrypt(encrypted).toString()}',
+        r'${RSA().privateKey(privateKey).decrypt(encrypted).toString()}',
       ).process(context: {...context, 'encrypted': encrypted});
 
       expect(decrypted, context['data']);
@@ -99,8 +99,7 @@ void main() {
       };
 
       final encrypted = Template(
-        value:
-            r'${RSA().aes(AES().key(key).iv(iv)).publicKey(publicKey).encrypt(data)}',
+        r'${RSA().aes(AES().key(key).iv(iv)).publicKey(publicKey).encrypt(data)}',
       ).process(context: context);
 
       final parts = encrypted.split(':');
@@ -113,8 +112,7 @@ void main() {
       );
 
       final decrypted = Template(
-        value:
-            r'${RSA().aes(AES().key(key).iv(iv)).privateKey(privateKey).decrypt(encrypted).toString()}',
+        r'${RSA().aes(AES().key(key).iv(iv)).privateKey(privateKey).decrypt(encrypted).toString()}',
       ).process(context: {...context, 'encrypted': encrypted});
 
       expect(decrypted, context['data']);
@@ -128,7 +126,7 @@ void main() {
       };
 
       final signature = Template(
-        value: r'${RSA().privateKey(privateKey).sign(data).toBase64()}',
+        r'${RSA().privateKey(privateKey).sign(data).toBase64()}',
       ).process(context: context);
 
       expect(
@@ -137,14 +135,13 @@ void main() {
       );
 
       var verified = Template(
-        value: r'${RSA().publicKey(publicKey).verify(data, signature)}',
+        r'${RSA().publicKey(publicKey).verify(data, signature)}',
       ).process(context: {...context, 'signature': signature});
 
       expect(verified, 'true');
 
       verified = Template(
-        value:
-            r'${RSA().publicKey(publicKey).verify("Hellow World!", signature)}',
+        r'${RSA().publicKey(publicKey).verify("Hellow World!", signature)}',
       ).process(context: {...context, 'signature': signature});
 
       expect(verified, 'false');

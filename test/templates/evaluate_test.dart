@@ -19,14 +19,14 @@ void main() {
 
   group('evaluate', () {
     test('async', () async {
-      final template = Template(value: r'${seconds(2)}');
+      final template = Template(r'${seconds(2)}');
       final result = await template.evaluateAsync();
 
       expect(result, const Duration(seconds: 2));
     });
 
     test('multiple expressions', () {
-      final template = Template(value: r'${seconds(2)}${milliseconds(500)}');
+      final template = Template(r'${seconds(2)}${milliseconds(500)}');
       try {
         template.evaluate();
         fail('expected expression');
@@ -36,14 +36,14 @@ void main() {
     });
 
     test('no expression', () {
-      final template = Template(value: '2');
+      final template = Template('2');
       final result = template.evaluate();
 
       expect(result, '2');
     });
 
     test('sync', () {
-      final template = Template(value: r'${seconds(2)}');
+      final template = Template(r'${seconds(2)}');
       final result = template.evaluate();
 
       expect(result, const Duration(seconds: 2));

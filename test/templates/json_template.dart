@@ -9,7 +9,7 @@ void main() {
   };
 
   test('json template', () {
-    final template = Template(value: _kTemplate);
+    final template = Template(_kTemplate);
 
     final result = template.process(context: context);
 

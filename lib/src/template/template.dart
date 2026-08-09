@@ -2,7 +2,7 @@ import 'package:logging/logging.dart';
 import 'package:template_expressions/template_expressions.dart';
 
 class Template {
-  Template({required this._value, List<ExpressionSyntax>? syntax})
+  Template(this._value, {List<ExpressionSyntax>? syntax})
     : _syntax = syntax?.isNotEmpty == true
           ? syntax!
           : const [StandardExpressionSyntax()];

@@ -23,7 +23,7 @@ void main() {
     test('base64', () {
       const input =
           r'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=`~!@#$%^&*()_+[]{},./<>?;:"\|';
-      var template = Template(value: r'${utf8.decode(base64.decode(input))}');
+      var template = Template(r'${utf8.decode(base64.decode(input))}');
 
       expect(
         template.process(
@@ -35,7 +35,7 @@ void main() {
         input,
       );
 
-      template = Template(value: r'${base64.encode(input)}');
+      template = Template(r'${base64.encode(input)}');
       expect(
         template.process(context: {'input': utf8.encode(input)}),
         'YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXpBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWjEyMzQ1Njc4OTAtPWB+IUAjJCVeJiooKV8rW117fSwuLzw+Pzs6Ilx8',
@@ -45,9 +45,7 @@ void main() {
     test('base64url', () {
       const input =
           r'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=`~!@#$%^&*()_+[]{},./<>?;:"\|';
-      var template = Template(
-        value: r'${utf8.decode(base64url.decode(input))}',
-      );
+      var template = Template(r'${utf8.decode(base64url.decode(input))}');
 
       expect(
         template.process(
@@ -59,7 +57,7 @@ void main() {
         input,
       );
 
-      template = Template(value: r'${base64url.encode(input)}');
+      template = Template(r'${base64url.encode(input)}');
       expect(
         template.process(context: {'input': utf8.encode(input)}),
         'YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXpBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWjEyMzQ1Njc4OTAtPWB-IUAjJCVeJiooKV8rW117fSwuLzw-Pzs6Ilx8',
@@ -68,7 +66,7 @@ void main() {
 
     test('hex', () {
       final template = Template(
-        value: r'${utf8.decode(hex.decode(hex.encode(utf8.encode(input))))}',
+        r'${utf8.decode(hex.decode(hex.encode(utf8.encode(input))))}',
       );
 
       expect(
@@ -80,13 +78,13 @@ void main() {
     test('json', () {
       const input = '{"foo":"bar"}';
 
-      final template = Template(value: r'${json.encode(json.decode(input))}');
+      final template = Template(r'${json.encode(json.decode(input))}');
 
       expect(template.process(context: {'input': input}), input);
     });
 
     test('utf8', () {
-      final template = Template(value: r'${utf8.decode(utf8.encode(input))}');
+      final template = Template(r'${utf8.decode(utf8.encode(input))}');
 
       expect(
         template.process(context: {'input': 'Hello World!'}),
@@ -101,7 +99,7 @@ void main() {
       final context = {'start': start};
       final template = Template(
         syntax: [const MustacheExpressionSyntax()],
-        value: '{{start.add(minutes(5).add(seconds(30)))}}',
+        '{{start.add(minutes(5).add(seconds(30)))}}',
       );
 
       expect(
@@ -117,7 +115,7 @@ void main() {
       final context = {'start': start};
       final template = Template(
         syntax: [const MustacheExpressionSyntax()],
-        value: '{{start.subtract(minutes(5).subtract(seconds(30)))}}',
+        '{{start.subtract(minutes(5).subtract(seconds(30)))}}',
       );
 
       expect(
@@ -137,12 +135,12 @@ void main() {
       };
 
       expect(
-        Template(value: r'${input.toJson(2)}').process(context: context),
+        Template(r'${input.toJson(2)}').process(context: context),
         const JsonEncoder.withIndent('  ').convert(context['input']),
       );
 
       expect(
-        Template(value: r'${input.toJson()}').process(context: context),
+        Template(r'${input.toJson()}').process(context: context),
         json.encode(context['input']),
       );
     });
@@ -158,8 +156,7 @@ void main() {
         },
       };
       expect(
-        Template(value: r'${input.entries}').evaluate(context: context)
-            is Iterable,
+        Template(r'${input.entries}').evaluate(context: context) is Iterable,
         true,
       );
     });
@@ -172,12 +169,12 @@ void main() {
       };
 
       expect(
-        Template(value: r'${input.toJson(2)}').process(context: context),
+        Template(r'${input.toJson(2)}').process(context: context),
         const JsonEncoder.withIndent('  ').convert(context['input']),
       );
 
       expect(
-        Template(value: r'${input.toJson()}').process(context: context),
+        Template(r'${input.toJson()}').process(context: context),
         json.encode(context['input']),
       );
     });
@@ -187,19 +184,16 @@ void main() {
     test('key / value', () {
       final context = {'input': const MapEntry('KEY', 'VALUE')};
 
-      expect(Template(value: r'${input.key}').process(context: context), 'KEY');
+      expect(Template(r'${input.key}').process(context: context), 'KEY');
 
-      expect(
-        Template(value: r'${input.value}').process(context: context),
-        'VALUE',
-      );
+      expect(Template(r'${input.value}').process(context: context), 'VALUE');
     });
   });
 
   group('String', () {
     test('decode', () {
       final template = Template(
-        value: r'${input.decode()["last"] + ", " + input.decode()["first"]}',
+        r'${input.decode()["last"] + ", " + input.decode()["first"]}',
       );
 
       expect(
@@ -211,13 +205,13 @@ void main() {
     });
 
     test('replaceAll', () {
-      final template = Template(value: r'${input.replaceAll("\n", "\\n")}');
+      final template = Template(r'${input.replaceAll("\n", "\\n")}');
 
       expect(template.process(context: {'input': 'a\nb\nc\n'}), 'a\\nb\\nc\\n');
     });
 
     test('toLowerCase', () {
-      final template = Template(value: r'${input.toLowerCase()}');
+      final template = Template(r'${input.toLowerCase()}');
 
       expect(
         template.process(context: {'input': 'Hello World!'}),
@@ -226,7 +220,7 @@ void main() {
     });
 
     test('toUpperCase', () {
-      final template = Template(value: r'${input.toUpperCase()}');
+      final template = Template(r'${input.toUpperCase()}');
 
       expect(
         template.process(context: {'input': 'Hello World!'}),
@@ -235,7 +229,7 @@ void main() {
     });
 
     test('trim', () {
-      final template = Template(value: r'${input.trim()}');
+      final template = Template(r'${input.trim()}');
 
       expect(
         template.process(context: {'input': '  Hello World!  '}),
