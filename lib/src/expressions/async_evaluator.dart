@@ -22,7 +22,7 @@ Literal _asLiteral(dynamic v) {
 class AsyncExpressionEvaluator extends ExpressionEvaluator {
   const AsyncExpressionEvaluator({super.memberAccessors});
 
-  final ExpressionEvaluator baseEvaluator = const ExpressionEvaluator();
+  final baseEvaluator = const ExpressionEvaluator();
 
   @override
   Stream eval(
@@ -88,7 +88,7 @@ class AsyncExpressionEvaluator extends ExpressionEvaluator {
     return CombineLatestStream([callee, ...arguments], (l) {
       return baseEvaluator.evalCallExpression(
         CallExpression(_asLiteral(l.first), [
-          for (var v in l.skip(1)) _asLiteral(v),
+          for (final v in l.skip(1)) _asLiteral(v),
         ]),
         context,
       );

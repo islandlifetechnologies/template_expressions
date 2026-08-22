@@ -2,6 +2,8 @@ import 'dart:math';
 
 /// Class that contains functions related generating random numbers.
 class RandomFunctions {
+  const RandomFunctions._();
+
   /// The functions related to the Random number generator
   static final functions = {
     'random': ([value]) {

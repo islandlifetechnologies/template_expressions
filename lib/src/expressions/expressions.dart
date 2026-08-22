@@ -23,7 +23,7 @@ class Identifier {
 abstract class Expression {
   String toTokenString();
 
-  static final ExpressionParser _parser = ExpressionParser();
+  static final _parser = ExpressionParser();
 
   static Expression? tryParse(String formattedString) {
     final result = _parser.expression.end().parse(formattedString);

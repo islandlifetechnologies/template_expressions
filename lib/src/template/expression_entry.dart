@@ -12,7 +12,7 @@ class ExpressionEntry implements Comparable<ExpressionEntry> {
   /// The syntax that is being used for this entry.
   final ExpressionSyntax syntax;
 
-  final StringBuffer _value = StringBuffer();
+  final _value = StringBuffer();
 
   /// Returns the content of the entry.  The content will exclude the syntax
   /// tokens.

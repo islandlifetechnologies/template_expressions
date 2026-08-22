@@ -10,30 +10,30 @@ void main() {
     final parser = ExpressionParser();
 
     test('identifier', () {
-      for (var v in ['foo', '_value', r'$x1']) {
+      for (final v in ['foo', '_value', r'$x1']) {
         expect(parser.identifier.end().parse(v).value.name, v);
       }
 
-      for (var v in ['1', '-qdf', '.sfd']) {
+      for (final v in ['1', '-qdf', '.sfd']) {
         expect(parser.identifier.end().parse(v) is Success, isFalse);
       }
     });
 
     test('numeric literal', () {
-      for (var v in ['134', '.5', '43.2', '1e3', '1E-3', '1e+0', '0x01']) {
+      for (final v in ['134', '.5', '43.2', '1e3', '1E-3', '1e+0', '0x01']) {
         final w = parser.numericLiteral.end().parse(v);
         expect(w is Success, isTrue, reason: 'Failed parsing `$v`');
         expect(w.value.value, num.parse(v));
         expect(w.value.raw, v);
       }
 
-      for (var v in ['-134', '.5.4', '1e5E3']) {
+      for (final v in ['-134', '.5.4', '1e5E3']) {
         expect(parser.numericLiteral.end().parse(v) is Success, isFalse);
       }
     });
 
     test('string literal', () {
-      for (var v in <String>[
+      for (final v in <String>[
         "'qf sf q'",
         "'qfqsd\"qsfd'",
         "'qsd\\nfqs\\'qsdf'",
@@ -48,38 +48,38 @@ void main() {
         expect(w.value.raw, v);
       }
 
-      for (var v in ["sd'<sdf'", "'df'sdf'"]) {
+      for (final v in ["sd'<sdf'", "'df'sdf'"]) {
         expect(parser.stringLiteral.end().parse(v) is Success, isFalse);
       }
     });
     test('bool literal', () {
-      for (var v in <String>['true', 'false']) {
+      for (final v in <String>['true', 'false']) {
         final w = parser.boolLiteral.end().parse(v);
         expect(w is Success, isTrue, reason: 'Failed parsing `$v`');
         expect(w.value.value, v == 'true');
         expect(w.value.raw, v);
       }
 
-      for (var v in ['True', 'False']) {
+      for (final v in ['True', 'False']) {
         expect(parser.boolLiteral.end().parse(v) is Success, isFalse);
       }
     });
 
     test('null literal', () {
-      for (var v in <String>['null']) {
+      for (final v in <String>['null']) {
         final w = parser.nullLiteral.end().parse(v);
         expect(w is Success, isTrue, reason: 'Failed parsing `$v`');
         expect(w.value.value, isNull);
         expect(w.value.raw, v);
       }
 
-      for (var v in ['NULL']) {
+      for (final v in ['NULL']) {
         expect(parser.nullLiteral.end().parse(v) is Success, isFalse);
       }
     });
 
     test('this literal', () {
-      for (var v in <String>['this']) {
+      for (final v in <String>['this']) {
         final w = parser.thisExpression.end().parse(v);
         expect(w is Success, isTrue, reason: 'Failed parsing `$v`');
         expect(w.value, isA<ThisExpression>());
@@ -87,7 +87,7 @@ void main() {
     });
 
     test('map literal', () {
-      for (var e in {
+      for (final e in {
         '{"hello": 1, "world": 2}': {
           Literal('hello'): Literal(1),
           Literal('world'): Literal(2),
@@ -103,7 +103,7 @@ void main() {
     });
 
     test('array literal', () {
-      for (var e in {
+      for (final e in {
         '[1, 2, 3]': [Literal(1), Literal(2), Literal(3)],
         '[]': [],
       }.entries) {
@@ -114,13 +114,13 @@ void main() {
         expect(w.value.raw, v);
       }
 
-      for (var v in ['[1,2[']) {
+      for (final v in ['[1,2[']) {
         expect(parser.arrayLiteral.end().parse(v) is Success, isFalse);
       }
     });
 
     test('token', () {
-      for (var v in <String>[
+      for (final v in <String>[
         'x',
         '_qsdf',
         'x.y',
@@ -140,7 +140,7 @@ void main() {
     });
 
     test('binary expression', () {
-      for (var v in <String>[
+      for (final v in <String>[
         '1',
         '1+2',
         'a+b*2-Math.sqrt(2)',
@@ -154,7 +154,7 @@ void main() {
     });
 
     test('unary expression', () {
-      for (var v in <String>['+1', '-a', '!true', '~0x01']) {
+      for (final v in <String>['+1', '-a', '!true', '~0x01']) {
         final w = parser.unaryExpression.end().parse(v);
         expect(w is Success, isTrue, reason: 'Failed parsing `$v`');
         expect(w.value.toString(), v);
@@ -162,7 +162,7 @@ void main() {
     });
 
     test('conditional expression', () {
-      for (var v in <String>["1<2 ? 'always' : 'never'"]) {
+      for (final v in <String>["1<2 ? 'always' : 'never'"]) {
         final w = parser.expression.end().parse(v);
         expect(w is Success, isTrue, reason: 'Failed parsing `$v`');
         expect(w.value.toString(), v);

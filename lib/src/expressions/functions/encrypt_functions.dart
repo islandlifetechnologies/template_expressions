@@ -7,6 +7,8 @@ import 'package:pointycastle/pointycastle.dart';
 
 /// Functions related to AES and RSA encryption.
 class EncryptFunctions {
+  const EncryptFunctions._();
+
   /// The functions related to JsonPath processing.
   static final functions = {
     'AES': () => Aes(),
@@ -155,7 +157,7 @@ class Rsa {
   };
 
   Aes? _aes;
-  String _digest = 'SHA256';
+  var _digest = 'SHA256';
   AsymmetricBlockCipher _encoding = PKCS1Encoding(RSAEngine());
   RSAPrivateKey? _privateKey;
   RSAPublicKey? _publicKey;

@@ -2,6 +2,7 @@ library;
 
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:template_expressions/src/template/default_template_context.dart';
 import 'package:template_expressions/template_expressions.dart';
 
 import 'async_evaluator.dart';
@@ -11,16 +12,6 @@ import 'async_evaluator.dart';
 // import 'functions/duration_functions.dart';
 // import 'functions/json_path_functions.dart';
 import 'standard_members.dart';
-
-export 'functions/codex_functions.dart';
-export 'functions/crypto_functions.dart';
-export 'functions/date_time_functions.dart';
-export 'functions/duration_functions.dart';
-export 'functions/encrypt_functions.dart';
-export 'functions/future_functions.dart';
-export 'functions/json_path_functions.dart';
-export 'functions/number_functions.dart';
-export 'functions/random_functions.dart';
 
 /// Handles evaluation of expressions
 ///
@@ -69,19 +60,7 @@ class ExpressionEvaluator {
     List<MemberAccessor> memberAccessors,
   }) = AsyncExpressionEvaluator;
 
-  static final Map<String, Object> _delegate = {
-    ...CodexFunctions.members,
-    ...CryptoFunctions.functions,
-    ...DateTimeFunctions.functions,
-    ...DurationFunctions.functions,
-    ...EncryptFunctions.functions,
-    ...FutureFunctions.functions,
-    ...JsonPathFunctions.functions,
-    ...NumberFunctions.functions,
-    ...RandomFunctions.functions,
-  };
-
-  static final Logger _logger = Logger('ExpressionEvaluator');
+  static final _logger = Logger('ExpressionEvaluator');
 
   final List<MemberAccessor> memberAccessors;
 
@@ -92,7 +71,9 @@ class ExpressionEvaluator {
   }) {
     dynamic result;
     final ctx = Map<String, dynamic>.from(context);
-    _delegate.forEach((key, value) => ctx.putIfAbsent(key, () => value));
+    DefaultTemplateContext.context.forEach(
+      (key, value) => ctx.putIfAbsent(key, () => value),
+    );
 
     if (expression is Literal) {
       result = evalLiteral(expression, ctx);
@@ -139,7 +120,7 @@ class ExpressionEvaluator {
   @protected
   dynamic evalLiteral(Literal literal, Map<String, dynamic> context) {
     final value = literal.value;
-    dynamic result = value;
+    var result = value;
 
     if (value is List) {
       result = value.map((e) => eval(e, context)).toList();
@@ -366,7 +347,7 @@ class ExpressionEvaluator {
     var found = false;
     dynamic result;
 
-    for (var a in memberAccessors) {
+    for (final a in memberAccessors) {
       if (a.canHandle(obj, member)) {
         result = a.getMember(obj, member);
         found = true;

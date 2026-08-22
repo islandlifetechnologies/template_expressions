@@ -2,6 +2,8 @@ import 'package:template_expressions/template_expressions.dart';
 
 /// Class that contains functions related to creating Durations.
 class DurationFunctions {
+  const DurationFunctions._();
+
   /// The functions related to the Duration creation
   static final functions = {
     'Duration': (value, [hours, minutes, seconds, milliseconds]) =>

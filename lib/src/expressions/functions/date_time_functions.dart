@@ -3,6 +3,8 @@ import 'package:template_expressions/template_expressions.dart';
 
 /// Class containing functions related to Date / Time processing.
 class DateTimeFunctions {
+  const DateTimeFunctions._();
+
   /// The functions related to Date / Time processing.
   static final functions = {
     'DateFormat': (format) => DateFormat(format ?? 'yyyy-MM-dd'),

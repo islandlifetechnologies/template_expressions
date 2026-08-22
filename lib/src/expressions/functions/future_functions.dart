@@ -3,6 +3,8 @@ import 'package:template_expressions/template_expressions.dart';
 /// Class that contains functions related to working with [Future].  As a note,
 /// when using these functions, be sure to use the [AsyncExpressionEvaluator]
 class FutureFunctions {
+  const FutureFunctions._();
+
   /// The functions related to working with a Future
   static final functions = {
     'await': (value) => value is Future

@@ -1,3 +1,12 @@
+## 4.2.0
+
+- Added file system integrations.
+- Added `DefaultTemplateContext` to be able to easily provide a custom context to all templates.
+
+## 4.1.0
+
+- Added `env` option to get environment variables via templates.
+
 ## 4.0.2
 
 - Moved `Template.value` from named parameter to a positional one.

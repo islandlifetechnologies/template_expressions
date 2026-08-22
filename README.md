@@ -2,7 +2,6 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 **Table of Contents**
 
 - [Introduction](#introduction)
@@ -32,30 +31,34 @@
   - [Encrypt](#encrypt)
     - [Example](#example-2)
     - [Member Functions](#member-functions-4)
-  - [Iterable](#iterable)
+  - [FileSystem](#filesystem)
     - [Member Functions](#member-functions-5)
-    - [List](#list)
+    - [Path functions](#path-functions)
+  - [Iterable](#iterable)
     - [Member Functions](#member-functions-6)
+    - [List](#list)
+    - [Member Functions](#member-functions-7)
     - [Int List Member Functions](#int-list-member-functions)
   - [JsonPath](#jsonpath)
     - [Constructors](#constructors-3)
     - [Global Functions](#global-functions-2)
-    - [Member Functions](#member-functions-7)
-  - [JsonPathMatch](#jsonpathmatch)
     - [Member Functions](#member-functions-8)
-  - [Map](#map)
+  - [JsonPathMatch](#jsonpathmatch)
     - [Member Functions](#member-functions-9)
-  - [MapEntry](#mapentry)
+  - [Map](#map)
     - [Member Functions](#member-functions-10)
-  - [num](#num)
+  - [MapEntry](#mapentry)
     - [Member Functions](#member-functions-11)
+  - [num](#num)
+    - [Member Functions](#member-functions-12)
+  - [Platform](#platform)
   - [random](#random)
     - [Example](#example-3)
   - [String](#string)
-    - [Member Functions](#member-functions-12)
+    - [Member Functions](#member-functions-13)
     - [Custom Functions](#custom-functions)
   - [Object](#object)
-    - [Member Functions](#member-functions-13)
+    - [Member Functions](#member-functions-14)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -139,6 +142,8 @@ The standard expression syntax follows the Dart string interpolation pattern. Th
 ---
 
 ## Built in Objects and Members
+
+A `DefaultTemplateContext` is provided that, by default, includes all the members / functions in this section. You may add or remove items to that context as needed for your application's needs.
 
 ### Codex
 
@@ -325,6 +330,33 @@ RSA().publicKey(publicKey).verify(data, signature)
 
 ---
 
+### FileSystem
+
+Utilizes the [FileSystem](https://pub.dev/documentation/file/latest/file/FileSystem-class.html) and binds it to the context of `fs`. Creates secondary helper functions named `Directory` and `File`. Additionally, this exposts, via the `path` value, several of the [path](https://pub.dev/packages/path) package's functions.
+
+#### Member Functions
+
+| Function    | Example                                  |
+| ----------- | ---------------------------------------- |
+| `fs`        | `${fs.currentDirectory}`                 |
+| `Directory` | `${Directory('mocks').existsSync()}`     |
+| `File`      | `${File('foo.json').readAsStringSync()}` |
+
+#### Path functions
+
+| Function                   | Example                                      |
+| -------------------------- | -------------------------------------------- |
+| `basename`                 | `${path.basename(fileName)}`                 |
+| `basenameWithoutExtension` | `${path.basenameWithoutExtension(fileName)}` |
+| `extension`                | `${path.extension(fileName)}`                |
+| `dirname`                  | `${path.dirname(fileName)}`                  |
+| `fromUri`                  | `${path.fromUri(uri)}`                       |
+| `join`                     | `${path.join('foo', 'bar')}`                 |
+| `joinAll`                  | `${path.joinAll(['foo', 'bar', 'baz'])}`     |
+| `relative`                 | `${path.relative(fileName, parent)}`         |
+
+---
+
 ### Iterable
 
 Several member functions from the [Iterable](https://api.flutter.dev/flutter/dart-core/Iterable-class.html) class are supported.
@@ -346,6 +378,8 @@ Several member functions from the [Iterable](https://api.flutter.dev/flutter/dar
 | [take](https://api.flutter.dev/flutter/dart-core/Iterable/take.html)             | `${value.take(3).join(',')}`                 |
 | [toList](https://api.flutter.dev/flutter/dart-core/Iterable/toList.html)         | `${value.toList().sort()}`                   |
 | [toSet](https://api.flutter.dev/flutter/dart-core/Iterable/toSet.html)           | `${value.toSet().first}`                     |
+
+---
 
 #### List
 
@@ -475,6 +509,15 @@ The following [num](https://api.flutter.dev/flutter/dart-core/num-class.html) me
 | [toStringAsPrecision](https://api.flutter.dev/flutter/dart-core/num/toStringAsPrecision.html)     | `${number.toStringAsPrecision(precision)}`        |
 | [truncate](https://api.flutter.dev/flutter/dart-core/num/truncate.html)                           | `${number.truncate()}`                            |
 | [truncateToDouble](https://api.flutter.dev/flutter/dart-core/num/truncateToDouble.html)           | `${number.truncateToDouble()}`                    |
+
+---
+
+### Platform
+
+| Function               | Example                           |
+| ---------------------- | --------------------------------- |
+| `env`                  | `${env.PATH ?? env['Path']}`      |
+| `Platform.environment` | `${Platform.environment['PATH']}` |
 
 ---
 

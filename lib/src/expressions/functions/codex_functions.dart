@@ -5,6 +5,8 @@ import 'package:template_expressions/src/types/codex.dart';
 
 /// Functions related to JsonPath processing.
 class CodexFunctions {
+  const CodexFunctions._();
+
   /// The functions related to JsonPath processing.
   static final members = {
     'base64': Codex(

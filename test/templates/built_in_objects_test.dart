@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
+import 'package:file/memory.dart';
 import 'package:logging/logging.dart';
 import 'package:template_expressions/template_expressions.dart';
 import 'package:test/test.dart';
@@ -252,6 +253,113 @@ void main() {
     });
   });
 
+  group('FileSystem', () {
+    setUpAll(() {
+      final fs = MemoryFileSystem();
+      fs.file('contents/foo.txt')
+        ..createSync(recursive: true)
+        ..writeAsString('bar');
+      FileSystemFunctions.fileSystemOverride = fs;
+    });
+
+    tearDownAll(() {
+      FileSystemFunctions.fileSystemOverride = null;
+    });
+
+    test('FileSystem.directory', () {
+      final template = Template(
+        r'${FileSystem().directory("contents").existsSync()}',
+      );
+      expect(template.evaluate(), true);
+    });
+    test('FileSystem.file', () {
+      final template = Template(
+        r'${FileSystem().file("contents/foo.txt").existsSync()}',
+      );
+      expect(template.evaluate(), true);
+    });
+
+    test('Directory()', () {
+      final template = Template(r'${Directory("contents").existsSync()}');
+      expect(template.evaluate(), true);
+    });
+    test('File()', () {
+      final template = Template(r'${File("contents/foo.txt").existsSync()}');
+      expect(template.evaluate(), true);
+    });
+    test('File().readAsStringSync()', () {
+      final template = Template(
+        r'${File("contents/foo.txt").readAsStringSync() == "bar"}',
+      );
+      expect(template.evaluate(), true);
+    });
+
+    group('path', () {
+      test('basename', () {
+        expect(
+          Template(
+            r'${path.basename(File("contents/foo.txt").path)}',
+          ).evaluate(),
+          'foo.txt',
+        );
+      });
+      test('basenameWithoutExtension', () {
+        expect(
+          Template(
+            r'${path.basenameWithoutExtension(File("contents/foo.txt").path)}',
+          ).evaluate(),
+          'foo',
+        );
+      });
+      test('extension', () {
+        expect(
+          Template(
+            r'${path.extension(File("contents/foo.txt").path)}',
+          ).evaluate(),
+          '.txt',
+        );
+      });
+      test('dirname', () {
+        expect(
+          Template(
+            r'${path.dirname(File("contents/foo.txt").path)}',
+          ).evaluate(),
+          'contents',
+        );
+      });
+      test('join', () {
+        expect(
+          Template(
+            r'${path.join(Directory("contents").path, "foo.txt")}',
+          ).evaluate(),
+          'contents/foo.txt',
+        );
+      });
+      test('joinAll', () {
+        expect(
+          Template(
+            r'${path.joinAll([Directory("contents").path, "foo.txt"])}',
+          ).evaluate(),
+          'contents/foo.txt',
+        );
+      });
+      test('relative', () {
+        expect(
+          Template(
+            r'${path.relative(File("contents/foo.txt").path, "contents")}',
+          ).evaluate(),
+          'foo.txt',
+        );
+        expect(
+          Template(
+            r'${path.relative(File("contents/foo.txt").path)}',
+          ).evaluate(),
+          'contents/foo.txt',
+        );
+      });
+    });
+  });
+
   group('Future', () {
     final context = {
       'a': () async {
@@ -425,6 +533,24 @@ bar: bar
         Template(r'${x.toDouble()}').evaluate(context: {'x': 'foo'}),
         null,
       );
+    });
+  });
+
+  group('Platform', () {
+    test('env', () {
+      final template = Template(r'${env.PATH ?? env.Path}');
+      final evaluated = template.evaluate();
+
+      expect(evaluated, isNotNull);
+    });
+
+    test('Platform.environment', () {
+      final template = Template(
+        r'${Platform.environment["PATH"] ?? Platform.environment["Path"]}',
+      );
+      final evaluated = template.evaluate();
+
+      expect(evaluated, isNotNull);
     });
   });
 

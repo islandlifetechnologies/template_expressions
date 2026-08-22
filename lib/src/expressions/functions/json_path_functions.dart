@@ -2,6 +2,8 @@ import 'package:json_path/json_path.dart';
 
 /// Functions related to JsonPath processing.
 class JsonPathFunctions {
+  const JsonPathFunctions._();
+
   /// The functions related to JsonPath processing.
   static final functions = {
     'JsonPath': (value) => JsonPath(value),

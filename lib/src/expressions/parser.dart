@@ -119,7 +119,7 @@ class ExpressionParser {
   // Also use a map for the binary operations but set their values to their
   // binary precedence for quick reference:
   // see [Order of operations](http://en.wikipedia.org/wiki/Order_of_operations#Programming_language)
-  static const Map<String, int> binaryOperations = {
+  static const binaryOperations = <String, int>{
     '||': 1,
     '&&': 2,
     '|': 3,

@@ -4,6 +4,8 @@ import 'package:crypto/crypto.dart';
 
 /// Class that contains functions related to the crypto package.
 class CryptoFunctions {
+  const CryptoFunctions._();
+
   /// The functions related to the crypto package.
   static final functions = {
     'hmac': (key, message) => Hmac(

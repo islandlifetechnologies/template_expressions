@@ -7,7 +7,7 @@ class Template {
           ? syntax!
           : const [StandardExpressionSyntax()];
 
-  static final Logger _logger = Logger('Template');
+  static final _logger = Logger('Template');
 
   final List<ExpressionSyntax> _syntax;
   final String _value;
@@ -19,7 +19,7 @@ class Template {
     List<MemberAccessor<dynamic>> memberAccessors = const [],
   }) {
     final ctx = <String, Object>{};
-    for (var entry in context.entries) {
+    for (final entry in context.entries) {
       if (entry.key != null && entry.value != null) {
         ctx[entry.key.toString()] = entry.value;
       }
@@ -54,7 +54,7 @@ class Template {
     List<MemberAccessor<dynamic>> memberAccessors = const [],
   }) async {
     final ctx = <String, Object>{};
-    for (var entry in context.entries) {
+    for (final entry in context.entries) {
       if (entry.key != null && entry.value != null) {
         ctx[entry.key.toString()] = entry.value;
       }
@@ -89,7 +89,7 @@ class Template {
     List<MemberAccessor<dynamic>> memberAccessors = const [],
   }) {
     final ctx = <String, Object>{};
-    for (var entry in context.entries) {
+    for (final entry in context.entries) {
       if (entry.key != null && entry.value != null) {
         ctx[entry.key.toString()] = entry.value;
       }
@@ -99,7 +99,7 @@ class Template {
     var data = prepared.data;
 
     final evaluator = ExpressionEvaluator(memberAccessors: memberAccessors);
-    for (var entry in prepared.entries) {
+    for (final entry in prepared.entries) {
       try {
         final evaled = evaluator.eval(Expression.parse(entry.content), ctx);
         data = entry.replace(
@@ -123,7 +123,7 @@ class Template {
     List<MemberAccessor<dynamic>> memberAccessors = const [],
   }) async {
     final ctx = <String, Object>{};
-    for (var entry in context.entries) {
+    for (final entry in context.entries) {
       if (entry.key != null && entry.value != null) {
         ctx[entry.key.toString()] = entry.value;
       }
@@ -135,7 +135,7 @@ class Template {
     final evaluator = ExpressionEvaluator.async(
       memberAccessors: memberAccessors,
     );
-    for (var entry in prepared.entries) {
+    for (final entry in prepared.entries) {
       try {
         final evaled = await evaluator
             .eval(Expression.parse(entry.content), ctx)
@@ -170,7 +170,7 @@ class Template {
         start += ch;
 
         var startSyntax = false;
-        for (var syntax in _syntax) {
+        for (final syntax in _syntax) {
           if (syntax.escapeChar == ch &&
               i < _value.length - 1 &&
               syntax.startToken.startsWith(_value.substring(i + 1, i + 2))) {
