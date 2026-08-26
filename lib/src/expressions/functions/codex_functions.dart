@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:convert/convert.dart';
 import 'package:template_expressions/src/types/codex.dart';
+import 'package:yaon/yaon.dart';
 
 /// Functions related to JsonPath processing.
 class CodexFunctions {
@@ -28,6 +29,10 @@ class CodexFunctions {
     'utf8': Codex(
       decoder: (value) => utf8.decode(value),
       encoder: (value) => utf8.encode(value),
+    ),
+    'yaon': Codex(
+      decoder: (value) => yaon.parse(value),
+      encoder: (value) => json.encode(value),
     ),
   };
 }

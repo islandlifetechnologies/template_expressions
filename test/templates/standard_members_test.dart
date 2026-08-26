@@ -91,6 +91,25 @@ void main() {
         'Hello World!',
       );
     });
+
+    test('yaon -- json', () {
+      const input = '{"foo":"bar"}';
+
+      final template = Template(r'${yaon.encode(yaon.decode(input))}');
+
+      expect(template.process(context: {'input': input}), input);
+    });
+
+    test('yaon -- yaml', () {
+      const inputJson = '{"foo":"bar"}';
+      const inputYaml = '''
+foo: bar
+''';
+
+      final template = Template(r'${yaon.encode(yaon.decode(input))}');
+
+      expect(template.process(context: {'input': inputYaml}), inputJson);
+    });
   });
 
   group('DateTime', () {

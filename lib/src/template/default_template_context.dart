@@ -1,8 +1,5 @@
 import 'package:template_expressions/template_expressions.dart';
 
-import '../expressions/functions/fs/default_file_system.dart'
-    if (dart.library.io) '../expressions/functions/fs/io_file_system.dart';
-
 /// Holds the default context that is used by all templates.  Adding or removing
 /// items to this will affect all templates at evaluation / processing time.
 abstract final class DefaultTemplateContext {
@@ -22,7 +19,5 @@ abstract final class DefaultTemplateContext {
     ...NumberFunctions.functions,
     ...PlatformFunctions.functions,
     ...RandomFunctions.functions,
-
-    'fs': getFileSystem(),
   };
 }

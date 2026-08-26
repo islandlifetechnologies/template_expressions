@@ -2,13 +2,17 @@ import 'package:logging/logging.dart';
 import 'package:template_expressions/template_expressions.dart';
 
 class Template {
-  Template(this._value, {List<ExpressionSyntax>? syntax})
-    : _syntax = syntax?.isNotEmpty == true
-          ? syntax!
-          : const [StandardExpressionSyntax()];
+  Template(
+    this._value, {
+    this._context = const {},
+    List<ExpressionSyntax>? syntax,
+  }) : _syntax = syntax?.isNotEmpty == true
+           ? syntax!
+           : const [StandardExpressionSyntax()];
 
   static final _logger = Logger('Template');
 
+  final Map<String, dynamic> _context;
   final List<ExpressionSyntax> _syntax;
   final String _value;
 
@@ -19,7 +23,7 @@ class Template {
     List<MemberAccessor<dynamic>> memberAccessors = const [],
   }) {
     final ctx = <String, Object>{};
-    for (final entry in context.entries) {
+    for (final entry in {..._context, ...context}.entries) {
       if (entry.key != null && entry.value != null) {
         ctx[entry.key.toString()] = entry.value;
       }
@@ -54,7 +58,7 @@ class Template {
     List<MemberAccessor<dynamic>> memberAccessors = const [],
   }) async {
     final ctx = <String, Object>{};
-    for (final entry in context.entries) {
+    for (final entry in {..._context, ...context}.entries) {
       if (entry.key != null && entry.value != null) {
         ctx[entry.key.toString()] = entry.value;
       }
@@ -82,14 +86,14 @@ class Template {
     return result;
   }
 
-  /// Evaluates the template into a string result.  The template may have
-  /// multiple expressions which will be concatenated into the returned value.
+  /// Processes the template into a string result by replacing all template
+  /// expressions within the value and then returning the result.
   String process({
     Map<dynamic, dynamic> context = const {},
     List<MemberAccessor<dynamic>> memberAccessors = const [],
   }) {
     final ctx = <String, Object>{};
-    for (final entry in context.entries) {
+    for (final entry in {..._context, ...context}.entries) {
       if (entry.key != null && entry.value != null) {
         ctx[entry.key.toString()] = entry.value;
       }
@@ -123,7 +127,7 @@ class Template {
     List<MemberAccessor<dynamic>> memberAccessors = const [],
   }) async {
     final ctx = <String, Object>{};
-    for (final entry in context.entries) {
+    for (final entry in {..._context, ...context}.entries) {
       if (entry.key != null && entry.value != null) {
         ctx[entry.key.toString()] = entry.value;
       }

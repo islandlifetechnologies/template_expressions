@@ -141,6 +141,9 @@ void main() {
     template = Template(syntax: [syntax], r'Hello ${a}!');
     expect(template.process(context: context), 'Hello a!');
 
+    template = Template(context: context, syntax: [syntax], r'Hello ${a}!');
+    expect(template.process(), 'Hello a!');
+
     template = Template(syntax: [syntax], r'Hello ${a + b}!');
     expect(template.process(context: context), 'Hello aB!');
 

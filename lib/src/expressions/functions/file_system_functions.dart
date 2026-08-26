@@ -1,4 +1,5 @@
 import 'package:file/file.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
 import 'fs/default_file_system.dart'
@@ -7,13 +8,18 @@ import 'fs/default_file_system.dart'
 class FileSystemFunctions {
   const FileSystemFunctions._();
 
+  @visibleForTesting
   static FileSystem? fileSystemOverride;
 
+  /// Returns the file system utilized by the Template engine for parsing
+  /// expressions.  Callers can read this value to ensure that they are
+  /// referencing the same file system the templates are.
+  static FileSystem get fileSystem => fileSystemOverride ?? getFileSystem();
+
   static final functions = {
-    'Directory': (path) =>
-        (fileSystemOverride ?? getFileSystem()).directory(path),
-    'File': (path) => (fileSystemOverride ?? getFileSystem()).file(path),
-    'FileSystem': () => fileSystemOverride ?? getFileSystem(),
+    'Directory': (path) => fileSystem.directory(path),
+    'File': (path) => fileSystem.file(path),
+    'FileSystem': () => fileSystem,
     'path': {
       'basename': p.basename,
       'basenameWithoutExtension': p.basenameWithoutExtension,

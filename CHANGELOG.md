@@ -1,3 +1,9 @@
+## 4.3.0
+
+- Added `yaon` Codex.
+- Added ability to pass a context to a `Template` during construction.
+- Added `FileSystemFunctions.fileSystem` accessor to get the file system the templates will use.
+
 ## 4.2.0
 
 - Added file system integrations.
