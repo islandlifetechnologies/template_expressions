@@ -29,9 +29,8 @@ void main() {
 
       final context = {'data': 'Hello World!', 'key': key};
 
-      final encrypted = Template(
-        r'${AES().key(key).encrypt(data)}',
-      ).process(context: context);
+      final encrypted = Template(r'${AES().key(key).encrypt(data)}')
+          .process(context: context);
 
       expect(encrypted != context['data'], true);
 
@@ -45,9 +44,8 @@ void main() {
     test('encrypt / decrypt: string key', () {
       final context = {'data': 'Hello World!', 'iv': _kIV, 'key': _kAesKey};
 
-      final encrypted = Template(
-        r'${AES().key(key).iv(iv).encrypt(data)}',
-      ).process(context: context);
+      final encrypted = Template(r'${AES().key(key).iv(iv).encrypt(data)}')
+          .process(context: context);
 
       final parts = encrypted.split(':');
 
@@ -76,9 +74,8 @@ void main() {
         'publicKey': keyPair.publicKey,
       };
 
-      final encrypted = Template(
-        r'${RSA().publicKey(publicKey).encrypt(data)}',
-      ).process(context: context);
+      final encrypted = Template(r'${RSA().publicKey(publicKey).encrypt(data)}')
+          .process(context: context);
 
       expect(encrypted != context['data'], true);
 
