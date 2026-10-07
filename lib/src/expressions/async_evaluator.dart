@@ -19,10 +19,19 @@ Literal _asLiteral(dynamic v) {
   return Literal(v);
 }
 
-class AsyncExpressionEvaluator extends ExpressionEvaluator {
-  const AsyncExpressionEvaluator({super.memberAccessors});
+class AsyncExpressionEvaluator({
+  super.fs,
+  super.memberAccessors,
+  super.workingDirectory,
+}) extends ExpressionEvaluator {
+  this
+    : baseEvaluator = ExpressionEvaluator(
+        fs: fs,
+        memberAccessors: memberAccessors,
+        workingDirectory: workingDirectory,
+      );
 
-  final baseEvaluator = const ExpressionEvaluator();
+  final ExpressionEvaluator baseEvaluator;
 
   @override
   Stream eval(

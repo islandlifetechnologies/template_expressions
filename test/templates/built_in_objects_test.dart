@@ -254,109 +254,121 @@ void main() {
   });
 
   group('FileSystem', () {
-    setUpAll(() {
-      final fs = MemoryFileSystem();
+    late MemoryFileSystem fs;
+    setUp(() {
+      fs = MemoryFileSystem();
       fs.file('contents/foo.txt')
         ..createSync(recursive: true)
         ..writeAsString('bar');
-      FileSystemFunctions.fileSystemOverride = fs;
     });
 
-    tearDownAll(() {
-      FileSystemFunctions.fileSystemOverride = null;
+    test('FileSystem.currentDirectory', () {
+      fs.directory('bar').createSync(recursive: true);
+      final template = Template(
+        r'${FileSystem().file("../contents/foo.txt").existsSync()}',
+        fs: fs,
+        workingDirectory: fs.directory('/bar').absolute.path,
+      );
+      expect(template.evaluate(), true);
     });
-
+    test('File.currentDirectory', () {
+      final template = Template(
+        r'${File("foo.txt").existsSync()}',
+        fs: fs,
+        workingDirectory: '/contents',
+      );
+      expect(template.evaluate(), true);
+    });
     test('FileSystem.directory', () {
       final template = Template(
         r'${FileSystem().directory("contents").existsSync()}',
+        fs: fs,
       );
       expect(template.evaluate(), true);
     });
     test('FileSystem.file', () {
       final template = Template(
         r'${FileSystem().file("contents/foo.txt").existsSync()}',
+        fs: fs,
       );
       expect(template.evaluate(), true);
     });
 
     test('Directory()', () {
-      final template = Template(r'${Directory("contents").existsSync()}');
+      final template = Template(
+        r'${Directory("contents").existsSync()}',
+        fs: fs,
+      );
       expect(template.evaluate(), true);
     });
     test('File()', () {
-      final template = Template(r'${File("contents/foo.txt").existsSync()}');
+      final template = Template(
+        r'${File("contents/foo.txt").existsSync()}',
+        fs: fs,
+      );
       expect(template.evaluate(), true);
     });
     test('File().readAsStringSync()', () {
       final template = Template(
         r'${File("contents/foo.txt").readAsStringSync() == "bar"}',
+        fs: fs,
       );
       expect(template.evaluate(), true);
     });
+  });
 
-    group('path', () {
-      test('basename', () {
-        expect(
-          Template(
-            r'${path.basename(File("contents/foo.txt").path)}',
-          ).evaluate(),
-          'foo.txt',
-        );
-      });
-      test('basenameWithoutExtension', () {
-        expect(
-          Template(
-            r'${path.basenameWithoutExtension(File("contents/foo.txt").path)}',
-          ).evaluate(),
-          'foo',
-        );
-      });
-      test('extension', () {
-        expect(
-          Template(
-            r'${path.extension(File("contents/foo.txt").path)}',
-          ).evaluate(),
-          '.txt',
-        );
-      });
-      test('dirname', () {
-        expect(
-          Template(
-            r'${path.dirname(File("contents/foo.txt").path)}',
-          ).evaluate(),
-          'contents',
-        );
-      });
-      test('join', () {
-        expect(
-          Template(
-            r'${path.join(Directory("contents").path, "foo.txt")}',
-          ).evaluate(),
-          'contents/foo.txt',
-        );
-      });
-      test('joinAll', () {
-        expect(
-          Template(
-            r'${path.joinAll([Directory("contents").path, "foo.txt"])}',
-          ).evaluate(),
-          'contents/foo.txt',
-        );
-      });
-      test('relative', () {
-        expect(
-          Template(
-            r'${path.relative(File("contents/foo.txt").path, "contents")}',
-          ).evaluate(),
-          'foo.txt',
-        );
-        expect(
-          Template(
-            r'${path.relative(File("contents/foo.txt").path)}',
-          ).evaluate(),
-          'contents/foo.txt',
-        );
-      });
+  group('path', () {
+    test('basename', () {
+      expect(
+        Template(r'${path.basename(File("contents/foo.txt").path)}').evaluate(),
+        'foo.txt',
+      );
+    });
+    test('basenameWithoutExtension', () {
+      expect(
+        Template(
+          r'${path.basenameWithoutExtension(File("contents/foo.txt").path)}',
+        ).evaluate(),
+        'foo',
+      );
+    });
+    test('extension', () {
+      expect(
+        Template(r'${path.extension(File("contents/foo.txt").path)}')
+            .evaluate(),
+        '.txt',
+      );
+    });
+    test('dirname', () {
+      expect(
+        Template(r'${path.dirname(File("contents/foo.txt").path)}').evaluate(),
+        'contents',
+      );
+    });
+    test('join', () {
+      expect(
+        Template(r'${path.join(Directory("contents").path, "foo.txt")}')
+            .evaluate(),
+        'contents/foo.txt',
+      );
+    });
+    test('joinAll', () {
+      expect(
+        Template(r'${path.joinAll([Directory("contents").path, "foo.txt"])}')
+            .evaluate(),
+        'contents/foo.txt',
+      );
+    });
+    test('relative', () {
+      expect(
+        Template(r'${path.relative(File("contents/foo.txt").path, "contents")}')
+            .evaluate(),
+        'foo.txt',
+      );
+      expect(
+        Template(r'${path.relative(File("contents/foo.txt").path)}').evaluate(),
+        'contents/foo.txt',
+      );
     });
   });
 
@@ -469,27 +481,24 @@ bar: bar
 
     test('toBase64', () {
       expect(
-        Template(
-          r'${input.toBase64()}',
-        ).process(context: {'input': utf8.encode(input)}),
+        Template(r'${input.toBase64()}')
+            .process(context: {'input': utf8.encode(input)}),
         base64.encode(utf8.encode(input)),
       );
     });
 
     test('toHex', () {
       expect(
-        Template(
-          r'${input.toHex()}',
-        ).process(context: {'input': utf8.encode(input)}),
+        Template(r'${input.toHex()}')
+            .process(context: {'input': utf8.encode(input)}),
         hex.encode(utf8.encode(input)),
       );
     });
 
     test('toString', () {
       expect(
-        Template(
-          r'${input.toString()}',
-        ).process(context: {'input': utf8.encode(input)}),
+        Template(r'${input.toString()}')
+            .process(context: {'input': utf8.encode(input)}),
         input,
       );
     });
@@ -498,15 +507,13 @@ bar: bar
   group('NumberFormat', () {
     test('format', () {
       expect(
-        Template(
-          r'${NumberFormat("#,###.00").format(x)}',
-        ).process(context: {'x': 1234}),
+        Template(r'${NumberFormat("#,###.00").format(x)}')
+            .process(context: {'x': 1234}),
         '1,234.00',
       );
       expect(
-        Template(
-          r'${NumberFormat("#,###.00").format(x)}',
-        ).process(context: {'x': 1234.0}),
+        Template(r'${NumberFormat("#,###.00").format(x)}')
+            .process(context: {'x': 1234.0}),
         '1,234.00',
       );
       expect(

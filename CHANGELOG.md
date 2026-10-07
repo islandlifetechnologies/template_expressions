@@ -1,3 +1,8 @@
+## 4.4.0
+
+- Require dart 3.13
+- Added the ability to pass a different working directory for file related functions.
+
 ## 4.3.0
 
 - Added `yaon` Codex.

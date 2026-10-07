@@ -1,20 +1,26 @@
+import 'package:file/file.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 import 'package:template_expressions/template_expressions.dart';
 
-class Template {
-  Template(
-    this._value, {
-    this._context = const {},
-    List<ExpressionSyntax>? syntax,
-  }) : _syntax = syntax?.isNotEmpty == true
-           ? syntax!
-           : const [StandardExpressionSyntax()];
+class Template(
+  final String _value, {
+  final Map<String, dynamic> _context = const {},
+  @visibleForTesting final FileSystem? _fs,
+  List<ExpressionSyntax>? syntax,
+
+  /// The working directory for any file system operations.  If set, this must
+  /// be an absolute path.
+  final String? workingDirectory,
+}) {
+  this
+    : _syntax = syntax?.isNotEmpty == true
+          ? syntax!
+          : const [StandardExpressionSyntax()];
 
   static final _logger = Logger('Template');
 
-  final Map<String, dynamic> _context;
   final List<ExpressionSyntax> _syntax;
-  final String _value;
 
   /// Evaluates the template into a dynamic result.  This only supports a single
   /// template expression and will throw an exception if there is more than one.
@@ -38,7 +44,11 @@ class Template {
           'The [evaluate] function only supports a single template expression but [${prepared.entries.length}] were found.',
         );
       } else {
-        final evaluator = ExpressionEvaluator(memberAccessors: memberAccessors);
+        final evaluator = ExpressionEvaluator(
+          fs: _fs,
+          memberAccessors: memberAccessors,
+          workingDirectory: workingDirectory,
+        );
 
         result = evaluator.eval(
           Expression.parse(prepared.entries.first.content),
@@ -74,7 +84,9 @@ class Template {
         );
       } else {
         final evaluator = ExpressionEvaluator.async(
+          fs: _fs,
           memberAccessors: memberAccessors,
+          workingDirectory: workingDirectory,
         );
 
         result = await evaluator

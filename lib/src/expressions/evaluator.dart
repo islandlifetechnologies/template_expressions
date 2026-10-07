@@ -1,16 +1,12 @@
 library;
 
+import 'package:file/file.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:template_expressions/src/template/default_template_context.dart';
 import 'package:template_expressions/template_expressions.dart';
 
 import 'async_evaluator.dart';
-// import 'expressions.dart';
-// import 'functions/codex_functions.dart';
-// import 'functions/date_time_functions.dart';
-// import 'functions/duration_functions.dart';
-// import 'functions/json_path_functions.dart';
 import 'standard_members.dart';
 
 /// Handles evaluation of expressions
@@ -53,16 +49,18 @@ import 'standard_members.dart';
 ///
 ///   r.forEach(print); // prints false and true
 ///
-class ExpressionEvaluator {
-  const ExpressionEvaluator({this.memberAccessors = const []});
-
-  const factory ExpressionEvaluator.async({
+class const ExpressionEvaluator({
+  final FileSystem? fs,
+  final List<MemberAccessor> memberAccessors = const [],
+  final String? workingDirectory,
+}) {
+  factory async({
+    FileSystem? fs,
     List<MemberAccessor> memberAccessors,
+    String? workingDirectory,
   }) = AsyncExpressionEvaluator;
 
   static final _logger = Logger('ExpressionEvaluator');
-
-  final List<MemberAccessor> memberAccessors;
 
   dynamic eval(
     Expression expression,
@@ -71,9 +69,10 @@ class ExpressionEvaluator {
   }) {
     dynamic result;
     final ctx = Map<String, dynamic>.from(context);
-    DefaultTemplateContext.context.forEach(
-      (key, value) => ctx.putIfAbsent(key, () => value),
-    );
+    DefaultTemplateContext(
+      fs: fs,
+      workingDirectory: workingDirectory,
+    ).context.forEach((key, value) => ctx.putIfAbsent(key, () => value));
 
     if (expression is Literal) {
       result = evalLiteral(expression, ctx);
