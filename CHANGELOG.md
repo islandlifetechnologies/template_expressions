@@ -1,3 +1,7 @@
+## 4.4.1
+
+- Fix issue with `workingDirectory` that would sett the process directory if used on a `LocalFileSystem`.
+
 ## 4.4.0
 
 - Require dart 3.13

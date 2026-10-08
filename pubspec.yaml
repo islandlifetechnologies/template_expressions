@@ -1,7 +1,7 @@
 name: "template_expressions"
 description: "A Dart library to process string based templates using expressions."
 homepage: "https://github.com/islandlifetechnologies/template_expressions"
-version: 4.4.0
+version: 4.4.1
 
 environment:
   sdk: ^3.13.0

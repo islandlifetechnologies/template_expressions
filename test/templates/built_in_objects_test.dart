@@ -262,16 +262,16 @@ void main() {
         ..writeAsString('bar');
     });
 
-    test('FileSystem.currentDirectory', () {
+    test('workingDirectory: FileSystem', () {
       fs.directory('bar').createSync(recursive: true);
       final template = Template(
         r'${FileSystem().file("../contents/foo.txt").existsSync()}',
         fs: fs,
-        workingDirectory: fs.directory('/bar').absolute.path,
+        workingDirectory: '/bar',
       );
       expect(template.evaluate(), true);
     });
-    test('File.currentDirectory', () {
+    test('workingDirectory: File', () {
       final template = Template(
         r'${File("foo.txt").existsSync()}',
         fs: fs,

@@ -1,3 +1,4 @@
+import 'package:file/chroot.dart';
 import 'package:file/file.dart';
 import 'package:path/path.dart' as p;
 
@@ -6,10 +7,14 @@ import 'fs/default_file_system.dart'
 
 class FileSystemFunctions({final FileSystem? fs, String? workingDirectory}) {
   this {
-    final fileSystem = fs ?? getFileSystem();
+    var fileSystem = fs ?? getFileSystem();
 
     if (workingDirectory != null) {
-      fileSystem.currentDirectory = workingDirectory;
+      fileSystem = ChrootFileSystem(
+        fileSystem,
+        fileSystem.path.rootPrefix(fileSystem.currentDirectory.absolute.path),
+      );
+      fileSystem.currentDirectory = fileSystem.directory(workingDirectory);
     }
 
     functions = {
